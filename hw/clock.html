@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>clock</title>
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            background: linear-gradient(to bottom, #001233, #312e36, #6f6275);
+            background-repeat: no-repeat;
+        }
+
+        #clock {
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            z-index: 1;
+            position: relative;
+            backdrop-filter: blur(3px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+
+        #digital-clock {
+            margin-top: 20px;
+            font-size: 3rem;
+            color: rgba(255, 255, 255, 0.8);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            letter-spacing: 6px;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+        }
+
+        #hour {
+            width: 20%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 5px;
+            position: absolute;
+            left: 30%;
+            top: calc(50% - 4px);
+            transform-origin: right center;
+        }
+
+        #minute {
+            width: 40%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 5px;
+            position: absolute;
+            left: 10%;
+            top: calc(50% - 3px);
+            transform-origin: right center;
+        }
+
+        #second {
+            width: 45%;
+            height: 4px;
+            background: rgba(255, 0, 0, 0.3);
+            border-radius: 5px;
+            position: absolute;
+            left: 5%;
+            top: calc(50% - 2px);
+            transform-origin: right center;
+        }
+
+        #center-dot {
+            width: 15px;
+            height: 15px;
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 5;
+        }
+
+        #dot {
+            width: 8px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 5;
+        }
+
+        .tick-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .tick {
+            position: absolute;
+            top: 5px;
+            left: 50%;
+            width: 2px;
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.4);
+            transform: translateX(-50%);
+        }
+
+        .tick.thick {
+            height: 15px;
+            width: 4px;
+            background-color: rgba(255, 255, 255, 0.6);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="particles-js"></div>
+
+    <div id="clock">
+        <div id="hour"></div>
+        <div id="minute"></div>
+        <div id="second"></div>
+        <div id="center-dot"></div>
+        <div id="dot"></div>
+    </div>
+    <br>
+    <div id="digital-clock"></div>
+
+
+    <script src="./particles.js-master/particles.js-master/particles.js"></script>
+    <script src="./app.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js'></script>
+    <script>
+        const clock = () => {
+            const date = new Date()
+            const h = date.getHours()
+            const m = date.getMinutes()
+            const s = date.getSeconds()
+
+
+            $('#hour').css('transform', `rotate(${h * 30 + 90}deg)`)
+            $('#minute').css('transform', `rotate(${m * 6 + 90}deg)`)
+            $('#second').css('transform', `rotate(${s * 6 + 90}deg)`)
+            $('#digital-clock').text(`${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`)
+        }
+
+        setInterval(clock, 1000)
+        clock()
+
+        $(document).ready(function () {
+            const clock = $('#clock');
+            for (let i = 0; i < 12; i++) {
+                const rotation = i * 30;
+                const tickContainer = $('<div class="tick-container"></div>');
+                const tick = $('<div class="tick"></div>');
+
+                if (i % 3 === 0) {
+                    tick.addClass('thick');
+                }
+
+                tickContainer.css('transform', `rotate(${rotation}deg)`);
+                tickContainer.append(tick);
+                clock.append(tickContainer);
+            }
+        });
+    </script>
+
+</body>
+
+</html>
